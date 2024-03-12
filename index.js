@@ -71,7 +71,7 @@ app.post('/web-data', async (req, res) => {
         ${products.map(item => item.title).join('\n')}`
       }
     })
-    return res.status(200).json({})
+    return res.status(200).send({ message: 'ok' })
   } catch (error) {
       await bot.answerWebAppQuery(queryId, {
         type: 'article',
@@ -79,7 +79,7 @@ app.post('/web-data', async (req, res) => {
         title: 'Не успешная покупка',
         input_message_content: {message_text: 'Не удалось приобрести товар'}
       })
-      return res.status(500).json({})
+      return res.status(500).send({ message: 'bad' })
     }
 })
 
