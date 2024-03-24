@@ -14,6 +14,7 @@ app.use(cors());
 bot.on('message', async (msg) => {
   const chatId = msg.chat.id;
   const text = msg.text;
+  const name = msg.from.first_name
 
   if (text === '/start') {
     await bot.sendMessage(chatId, 'Ниже появится кнопка, заполни форму', {
@@ -45,6 +46,7 @@ bot.on('message', async (msg) => {
       await bot.sendMessage(chatId, 'Спасибо за обратную связ!')
       await bot.sendMessage(chatId, 'Ваша страна: ' + data?.country)
       await bot.sendMessage(chatId, 'Ваша улица: ' + data?.street)
+      await bot.sendMessage(chatId, 'Ваше имя: ' + name)
 
       setTimeout(async () => {
         await bot.sendMessage(chatId, 'Всю информацию вы получите в этом чате')
@@ -57,7 +59,6 @@ bot.on('message', async (msg) => {
 });
 
 app.post('/web-data', async (req, res) => {
-  console.log(POST)
   const { queryId, products = [], totalPrice} = req.body;
 
   try {
