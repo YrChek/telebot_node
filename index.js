@@ -59,8 +59,9 @@ bot.on('message', async (msg) => {
 });
 
 app.post('/web-data', async (req, res) => {
-  const { queryId, products = [], totalPrice} = req.body;
-
+  const { initData, products = [], totalPrice} = req.body;
+  const searchParams = new URLSearchParams(initData);
+  const queryId = searchParams.get('query_id');
   try {
     await bot.answerWebAppQuery(queryId, {
       type: 'article',
@@ -72,18 +73,12 @@ app.post('/web-data', async (req, res) => {
         ${products.map(item => item.title).join('\n')}`
       }
     })
-    return res.status(200).send({ message: 'ok' })
+    return res.status(200).json({})
   } catch (error) {
-      await bot.answerWebAppQuery(queryId, {
-        type: 'article',
-        id: queryId,
-        title: 'Не успешная покупка',
-        input_message_content: {message_text: 'Не удалось приобрести товар'}
-      })
-      return res.status(500).send({ message: 'bad' })
+      return res.status(500).json({})
     }
 })
 
-const PORT = 3000;
+const PORT = 8000;
 
 app.listen(PORT, () => console.log('server started on PORT ' + PORT))
