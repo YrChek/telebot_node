@@ -59,6 +59,7 @@ bot.on('message', async (msg) => {
 });
 
 app.post('/web-data', async (req, res) => {
+  console.log('POST - запрос')
   const { initData, products = [], totalPrice} = req.body;
   const searchParams = new URLSearchParams(initData);
   const queryId = searchParams.get('query_id');
