@@ -80,6 +80,10 @@ app.post('/web-data', async (req, res) => {
     }
 })
 
+app.use('/', (_, res) => {
+  res.sendFile(__dirname + "/welcomePage.html");
+})
+
 const PORT = 8000;
 
 app.listen(PORT, () => console.log('server started on PORT ' + PORT))
