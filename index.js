@@ -69,8 +69,10 @@ app.post('/web-data', async (req, res) => {
       id: queryId,
       title: 'Успешная покупка',
       input_message_content: {
-        message_text: `Поздравляю с покупкой, вы преобрели товар на сумму '${totalPrice} руб.\n
-        Ваши товары:\n
+        message_text: 
+        `Поздравляю с покупкой!
+        Вы преобрели товар на сумму '${totalPrice} руб.
+        Ваши товары:
         ${products.map(item => item.title).join('\n')}`
       }
     })
