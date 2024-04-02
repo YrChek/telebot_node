@@ -2,6 +2,7 @@ const TelegramBot = require('node-telegram-bot-api');
 require('dotenv').config();
 const cors = require('cors');
 const express = require('express');
+const { dataCheck, validationKey } = require('./validatingData')
 
 const TOKEN = process.env.TOKEN
 const webAppUrl = process.env.URL
@@ -59,14 +60,24 @@ bot.on('message', async (msg) => {
 });
 
 app.post('/web-data', async (req, res) => {
-  console.log('POST - запрос')
   const { initData, products = [], totalPrice} = req.body;
-  const searchParams = new URLSearchParams(initData);
-  const queryId = searchParams.get('query_id');
+
+  if (!initData) {
+    return res.status(406).json({})
+  }
+  // const searchParams = new URLSearchParams(initData);
+  // const queryId = searchParams.get('query_id');
+
+  const appData = dataCheck(initData);
+  if (!appData) return res.status(406).json({})
+
+  const validator = validationKey(TOKEN, appData.data_check_string, appData.hash)
+  if (!validator) return res.status(401).json({})
+
   try {
-    await bot.answerWebAppQuery(queryId, {
+    await bot.answerWebAppQuery(appData.query_id, {
       type: 'article',
-      id: queryId,
+      id: appData.query_id,
       title: 'Успешная покупка',
       input_message_content: {
         message_text: 
